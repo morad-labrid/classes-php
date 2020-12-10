@@ -64,7 +64,12 @@
             $conn = mysqli_connect('localhost', 'root', '', 'classes');
             $login = $this->login;
             mysqli_query($conn, "DELETE FROM utilisateurs WHERE login = '$login'");
-            session_unset();
+            $this->id        = null;
+            $this->login     = null;
+            $this->password  = null;
+            $this->email     = null;
+            $this->firstname = null;
+            $this->lastname  = null;
         }
 
         // - public function update($login, $password, $email, $firstname,lastname)
@@ -105,22 +110,22 @@
         // - public function getLogin()
         // Retourne le login de l’utilisateur connecté.
         public function getLogin(){
-            return([$this->login]);
+            return($this->login);
         }
         // - public function getEmail()
         // Retourne l’adresse email de l’utilisateur connecté.
         public function getEmail(){
-            return([$this->email]);
+            return($this->email);
         }
         // - public function getFirstname()
         // Retourne le firstname de l’utilisateur connecté.
         public function getFirstname(){
-            return([$this->firstname]);
+            return($this->firstname);
         }
         // - public function getLastname()
         // Retourne le lastname de l’utilisateur connecté.
         public function getLastname(){
-            return([$this->lastname]);
+            return($this->lastname);
         }
         // - public function refresh()
         // Met à jour les attributs de la classe à partir de la base de données.
