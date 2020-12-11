@@ -20,7 +20,7 @@
                             'password'  => $password,
                             'firstname' => $firstname,
                             'lastname'  => $lastname ]);
-            return([$this->id, $this->login, $this->password, $this->email, $this->firstname, $this->lastname]);
+                            return([$login, $password, $email, $firstname, $lastname]);
         }
 
         // - public function connect($login, $password)
@@ -33,15 +33,17 @@
             $existe = $conn->prepare("SELECT * FROM utilisateurs WHERE login= :login && password= :password");
             $existe->execute(  ['login'    => $login,
                                 'password' => $password]);
-            $info = $existe->fetch();
-            if ($info == true) {
+            $info = $existe->fetch(PDO::FETCH_ASSOC);
+            $existe = $info['login'];
+            if ($existe == true) {
+       
                 $this->id        = $info["id"];
                 $this->login     = $info["login"];
                 $this->password  = $info["password"];
                 $this->email     = $info["email"];
                 $this->firstname = $info["firstname"];
                 $this->lastname  = $info["lastname"];
-            }else
+            }
             return([$this->id, $this->login, $this->password, $this->email, $this->firstname, $this->lastname]);
         }
 
@@ -63,12 +65,7 @@
             $conn = new PDO("mysql:host=localhost; dbname=classes", "root", "");
             $delete = $conn->prepare("DELETE FROM utilisateurs WHERE login = :login");
             $delete->execute(['login'=>$this->login]);
-            $this->id        = null;
-            $this->login     = null;
-            $this->password  = null;
-            $this->email     = null;
-            $this->firstname = null;
-            $this->lastname  = null;
+            echo "<br> vous avez bien supprimer le user <br>";
         }
 
         // - public function update($login, $password, $email, $firstname, lastname)
@@ -76,15 +73,15 @@
         public function update($login, $password, $email, $firstname,$lastname){
             // connexioin à la base de donnée
             $conn = new PDO("mysql:host=localhost; dbname=classes", "root", "");
-            // on verifier si le login et password existe et juste
-            $update = $conn->prepare("SELECT * FROM utilisateurs WHERE login='$login'");
+            $ancien_login  = $this->login;
+            $this->login        = $login;
+            $this->password     = $password;
+            $this->email        = $email;
+            $this->firstname    = $firstname;
+            $this->lastname     = $lastname;
+            $update = $conn->prepare("UPDATE utilisateurs SET 
+            login='$login', password='$password', email='$email', firstname='$firstname', lastname='$lastname' WHERE login='$ancien_login'");
             $update -> execute(['login'=>$this->login]);
-            /////////////////////////////
-            $this->login     = $login;
-            $this->password  = $password;
-            $this->email     = $email;
-            $this->firstname = $firstname;
-            $this->lastname  = $lastname;
         }
         // - public function isConnected()
         // Retourne un booléen permettant de savoir si un utilisateur est connecté ou
@@ -126,6 +123,7 @@
             // connexioin à la base de donnée
             $conn = mysqli_connect('localhost', 'root', '', 'classes');
             mysqli_refresh($conn, MYSQLI_REFRESH_LOG);
+            
         }
     }
 ?>
