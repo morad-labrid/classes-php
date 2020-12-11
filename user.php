@@ -64,12 +64,7 @@
             $conn = mysqli_connect('localhost', 'root', '', 'classes');
             $login = $this->login;
             mysqli_query($conn, "DELETE FROM utilisateurs WHERE login = '$login'");
-            $this->id        = null;
-            $this->login     = null;
-            $this->password  = null;
-            $this->email     = null;
-            $this->firstname = null;
-            $this->lastname  = null;
+            echo "vous avez bien supprimer le user";
         }
 
         // - public function update($login, $password, $email, $firstname,lastname)
@@ -77,22 +72,16 @@
         public function update($login, $password, $email, $firstname,$lastname){
             // connexioin à la base de donnée
             $conn   = mysqli_connect('localhost', 'root', '', 'classes');
-            $login  = $this->login;
-            // on verifier si le login et password existe et juste
-            $existe = mysqli_query($conn, "SELECT * FROM utilisateurs WHERE login='$login'");
-            $existe = mysqli_num_rows($existe);
-            $info   = mysqli_fetch_assoc($existe);
-            /////////////////////////////
-            if ($existe == 0) {
-                mysqli_query($conn, "UPDATE utilisateurs SET 
-                login='$login', password='$password', email='$email', firstname='$firstname', lastname='$lastname' WHERE login='$login'");
+                $ancien_login  = $this->login;
                 $this->login        = $login;
                 $this->password     = $password;
                 $this->email        = $email;
                 $this->firstname    = $firstname;
                 $this->lastname     = $lastname;
-            }
+                mysqli_query($conn, "UPDATE utilisateurs SET 
+                login='$login', password='$password', email='$email', firstname='$firstname', lastname='$lastname' WHERE login='$ancien_login'");
         }
+
         // - public function isConnected()
         // Retourne un booléen permettant de savoir si un utilisateur est connecté ou non.
         public function isConnected(){
@@ -102,31 +91,42 @@
 
             return($connected);
         }
+
         // - public function getAllInfos()
         // Retourne un tableau contenant l’ensemble des informations de l’utilisateur.
         public function getAllInfos(){
-            return([$this->id, $this->login, $this->password, $this->email, $this->firstname, $this->lastname]);
+            return(['id' => $this->id, 
+            'login' => $this->login, 
+            'login' => $this->password, 
+            'login' => $this->email, 
+            'login' => $this->firstname, 
+            'login' => $this->lastname]);
         }
+
         // - public function getLogin()
         // Retourne le login de l’utilisateur connecté.
         public function getLogin(){
             return($this->login);
         }
+
         // - public function getEmail()
         // Retourne l’adresse email de l’utilisateur connecté.
         public function getEmail(){
             return($this->email);
         }
+
         // - public function getFirstname()
         // Retourne le firstname de l’utilisateur connecté.
         public function getFirstname(){
             return($this->firstname);
         }
+
         // - public function getLastname()
         // Retourne le lastname de l’utilisateur connecté.
         public function getLastname(){
             return($this->lastname);
         }
+
         // - public function refresh()
         // Met à jour les attributs de la classe à partir de la base de données.
         public function refresh(){
